@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <title>Mobile Shop | Trendy Cart</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: #f5f7fb;
+      color: #1e293b;
+      padding-bottom: 75px;
+    }
+
+    /* Header */
+    .app-header {
+      background: white;
+      backdrop-filter: blur(0px);
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1px solid #eef2f6;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255,255,255,0.96);
+    }
+
+    .logo {
+      font-size: 1.7rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #3b82f6, #06b6d4);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.3px;
+    }
+
+    .cart-icon {
+      position: relative;
+      background: #f1f5f9;
+      padding: 8px 12px;
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .cart-icon span:first-child {
+      font-size: 1.3rem;
+    }
+
+    .cart-badge {
+      background: #ef4444;
+      color: white;
+      border-radius: 30px;
+      padding: 2px 8px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      min-width: 22px;
+      text-align: center;
+    }
+
+    /* Main container */
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 16px 16px 24px;
+    }
+
+    /* hero banner */
+    .hero {
+      background: linear-gradient(110deg, #1e293b 0%, #0f172a 100%);
+      border-radius: 28px;
+      padding: 24px 20px;
+      margin-bottom: 24px;
+      color: white;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    }
+
+    .hero h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .hero p {
+      opacity: 0.8;
+      font-size: 0.9rem;
+    }
+
+    /* section titles */
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin: 20px 0 12px 0;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    /* product grid (mobile optimized) */
+    .products-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      gap: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02), 0 4px 12px rgba(0,0,0,0.03);
+      transition: transform 0.1s ease, box-shadow 0.2s;
+      border: 1px solid #edf2f7;
+    }
+
+    .product-card:active {
+      transform: scale(0.99);
+    }
+
+    .product-img {
+      width: 70px;
+      height: 70px;
+      background: #f8fafc;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.02), 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .product-info {
+      flex: 1;
+    }
+
+    .product-title {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .product-price {
+      font-weight: 700;
+      color: #0f172a;
+      font-size: 1.15rem;
+      margin-top: 4px;
+    }
+
+    .price-old {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      text-decoration: line-through;
+      margin-left: 6px;
+      font-weight: normal;
+    }
+
+    .product-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .qty-control {
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border-radius: 44px;
+      gap: 6px;
+      padding: 4px 8px;
+    }
+
+    .qty-btn {
+      background: white;
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 30px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #1e293b;
+      cursor: pointer;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      transition: 0.1s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qty-btn:active {
+      background: #e2e8f0;
+    }
+
+    .qty-number {
+      font-weight: 600;
+      min-width: 28px;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    .add-btn {
+      background: #3b82f6;
+      border: none;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      width: 100%;
+    }
+
+    .add-btn:active {
+      background: #2563eb;
+      transform: scale(0.96);
+    }
+
+    /* cart drawer (modal) */
+    .cart-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(3px);
+      z-index: 1000;
+      visibility: hidden;
+      opacity: 0;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .cart-overlay.open {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .cart-drawer {
+      background: white;
+      width: 100%;
+      max-height: 85vh;
+      border-radius: 28px 28px 0 0;
+      padding: 24px 20px 30px;
+      overflow-y: auto;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    }
+
+    .cart-overlay.open .cart-drawer {
+      transform: translateY(0);
+    }
+
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #eef2ff;
+    }
+
+    .close-cart {
+      background: none;
+      border: none;
+      font-size: 1.7rem;
+      cursor: pointer;
+      padding: 0 8px;
+    }
+
+    .cart-items-list {
+      list-style: none;
+      margin-bottom: 20px;
+      max-height: 55vh;
+      overflow-y: auto;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #edf2f7;
+    }
+
+    .cart-item-info {
+      flex: 2;
+    }
+
+    .cart-item-title {
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .cart-item-price {
+      font-size: 0.8rem;
+      color: #3b82f6;
+      font-weight: 500;
+    }
+
+    .cart-item-qty {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f8fafc;
+      padding: 4px 8px;
+      border-radius: 40px;
+    }
+
+    .cart-qty-btn {
+      background: white;
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 30px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .cart-item-total {
+      font-weight: 700;
+      min-width: 65px;
+      text-align: right;
+    }
+
+    .cart-summary {
+      border-top: 2px dashed #e2e8f0;
+      padding-top: 18px;
+      margin-top: 8px;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin: 12px 0;
+    }
+
+    .checkout-btn {
+      background: #0f172a;
+      width: 100%;
+      padding: 16px;
+      border-radius: 60px;
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      transition: 0.2s;
+      margin-top: 10px;
+    }
+
+    .checkout-btn:active {
+      background: #1e293b;
+      transform: scale(0.97);
+    }
+
+    .empty-cart {
+      text-align: center;
+      padding: 40px 0;
+      color: #94a3b8;
+    }
+
+    /* toast */
+    .toast-msg {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e293bdd;
+      backdrop-filter: blur(8px);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 60px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      z-index: 1100;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    /* bottom safe */
+    @media (max-width: 480px) {
+      .container {
+        padding: 12px 12px 20px;
+      }
+      .product-img {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="logo">🛍️ trendCart</div>
+  <div class="cart-icon" id="cartIconBtn">
+    <span>🛒</span>
+    <span class="cart-badge" id="cartCountBadge">0</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="hero">
+    <h2>Flash sale 🔥</h2>
+    <p>Free delivery on orders over $40 • Up to 30% off</p>
+  </div>
+
+  <div class="section-title">
+    <span>✨ For you</span>
+    <span style="font-size: 0.75rem; color: #3b82f6;">just tap +</span>
+  </div>
+  <div class="products-grid" id="productsContainer"></div>
+</div>
+
+<!-- Cart drawer modal -->
+<div id="cartOverlay" class="cart-overlay">
+  <div class="cart-drawer">
+    <div class="cart-header">
+      <span>Your Cart 🛍️</span>
+      <button class="close-cart" id="closeCartBtn">&times;</button>
+    </div>
+    <div id="cartItemsList" class="cart-items-list">
+      <!-- dynamic cart items -->
+    </div>
+    <div class="cart-summary">
+      <div class="total-row">
+        <span>Subtotal</span>
+        <span id="cartTotalPrice">$0.00</span>
+      </div>
+      <button class="checkout-btn" id="checkoutBtn">Checkout ➤</button>
+    </div>
+  </div>
+</div>
+
+<div id="toastMessage" class="toast-msg">Added to cart</div>
+
+<script>
+  // ---------- product catalog ----------
+  const PRODUCTS = [
+    { id: 1, name: "Urban Sneakers", price: 59.99, imageEmoji: "👟", originalPrice: 89.99 },
+    { id: 2, name: "Wireless Buds", price: 34.99, imageEmoji: "🎧", originalPrice: 49.99 },
+    { id: 3, name: "Smart Watch Band", price: 49.99, imageEmoji: "⌚", originalPrice: 79.99 },
+    { id: 4, name: "Denim Jacket", price: 79.99, imageEmoji: "🧥", originalPrice: 119.99 },
+    { id: 5, name: "Gradient Hoodie", price: 45.99, imageEmoji: "👕", originalPrice: 65.99 },
+    { id: 6, name: "Mini Backpack", price: 39.99, imageEmoji: "🎒", originalPrice: 55.00 }
+  ];
+
+  // cart state: { id, quantity }
+  let cart = [];
+
+  // Helper: find cart item index
+  function findCartItemIndex(productId) {
+    return cart.findIndex(item => item.id === productId);
+  }
+
+  // update global UI: badge, total count, cart drawer
+  function updateCartUI() {
+    // update badge number (total quantity)
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const badge = document.getElementById('cartCountBadge');
+    if (badge) badge.innerText = totalItems;
+
+    // also save to localStorage if needed
+    localStorage.setItem('mobileCart', JSON.stringify(cart));
+
+    // update product cards: reflect current quantities on each product's number
+    renderProductCards();   // refresh quantity selectors and button states
+    renderCartDrawer();     // refresh side cart
+  }
+
+  // modify quantity (add/increment, decrement, set exact)
+  function updateQuantity(productId, changeBy, fromCart = false) {
+    const idx = findCartItemIndex(productId);
+    const product = PRODUCTS.find(p => p.id === productId);
+    if (!product) return;
+
+    if (idx === -1 && changeBy > 0) {
+      // add new product
+      cart.push({ id: productId, quantity: Math.min(99, changeBy) });
+    } else if (idx !== -1) {
+      const newQty = cart[idx].quantity + changeBy;
+      if (newQty <= 0) {
+        cart.splice(idx, 1);
+      } else {
+        cart[idx].quantity = Math.min(99, newQty);
+      }
+    }
+    // limit max 99 per item
+    updateCartUI();
+    showToast(changeBy > 0 ? `🛒 ${product.name} added` : `✖️ ${product.name} updated`);
+  }
+
+  // direct set quantity from cart drawer (using numeric)
+  function setQuantity(productId, newQty) {
+    if (newQty < 0) newQty = 0;
+    if (newQty === 0) {
+      const idx = findCartItemIndex(productId);
+      if (idx !== -1) cart.splice(idx, 1);
+    } else {
+      const idx = findCartItemIndex(productId);
+      if (idx !== -1) {
+        cart[idx].quantity = Math.min(99, newQty);
+      } else {
+        cart.push({ id: productId, quantity: Math.min(99, newQty) });
+      }
+    }
+    updateCartUI();
+    showToast(`Cart updated`);
+  }
+
+  // toast animation
+  let toastTimeout;
+  function showToast(message) {
+    const toast = document.getElementById('toastMessage');
+    if (!toast) return;
+    clearTimeout(toastTimeout);
+    toast.innerText = message;
+    toast.style.opacity = '1';
+    toastTimeout = setTimeout(() => {
+      toast.style.opacity = '0';
+    }, 1500);
+  }
+
+  // render product cards on main page (dynamic qty controls)
+  function renderProductCards() {
+    const container = document.getElementById('productsContainer');
+    if (!container) return;
+
+    container.innerHTML = '';
+    PRODUCTS.forEach(product => {
+      const cartItem = cart.find(item => item.id === product.id);
+      const quantityInCart = cartItem ? cartItem.quantity : 0;
+
+      const card = document.createElement('div');
+      card.className = 'product-card';
+
+      // image area
+      const imgDiv = document.createElement('div');
+      imgDiv.className = 'product-img';
+      imgDiv.innerText = product.imageEmoji;
+
+      const infoDiv = document.createElement('div');
+      infoDiv.className = 'product-info';
+      infoDiv.innerHTML = `
+        <div class="product-title">${product.name}</div>
+        <div class="product-price">
+          $${product.price.toFixed(2)}
+          <span class="price-old">$${product.originalPrice.toFixed(2)}</span>
+        </div>
+      `;
+
+      const actionsDiv = document.createElement('div');
+      actionsDiv.className = 'product-actions';
+
+      if (quantityInCart > 0) {
+        // quantity controller
+        const qtyControl = document.createElement('div');
+        qtyControl.className = 'qty-control';
+        const minusBtn = document.createElement('button');
+        minusBtn.innerText = '−';
+        minusBtn.className = 'qty-btn';
+        minusBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          updateQuantity(product.id, -1);
+        });
+        const qtySpan = document.createElement('span');
+        qtySpan.className = 'qty-number';
+        qtySpan.innerText = quantityInCart;
+        const plusBtn = document.createElement('button');
+        plusBtn.innerText = '+';
+        plusBtn.className = 'qty-btn';
+        plusBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          updateQuantity(product.id, 1);
+        });
+
+        qtyControl.appendChild(minusBtn);
+        qtyControl.appendChild(qtySpan);
+        qtyControl.appendChild(plusBtn);
+        actionsDiv.appendChild(qtyControl);
+
+        // also add "view cart" hint maybe not needed
+      } else {
+        const addButton = document.createElement('button');
+        addButton.innerText = 'Add to cart +';
+        addButton.className = 'add-btn';
+        addButton.addEventListener('click', (e) => {
+          e.stopPropagation();
+          updateQuantity(product.id, 1);
+        });
+        actionsDiv.appendChild(addButton);
+      }
+
+      card.appendChild(imgDiv);
+      card.appendChild(infoDiv);
+      card.appendChild(actionsDiv);
+      container.appendChild(card);
+    });
+
+    // re-sync quantities for any dynamic updates: after every render, need to reflect live numbers if user updates via cart
+    // we will re-run after each cart update so numbers refreshed
+  }
+
+  // render cart drawer (with precise controls)
+  function renderCartDrawer() {
+    const cartListEl = document.getElementById('cartItemsList');
+    const cartTotalSpan = document.getElementById('cartTotalPrice');
+    if (!cartListEl) return;
+
+    if (cart.length === 0) {
+      cartListEl.innerHTML = `<div class="empty-cart">🛒 Your cart is empty<br>✨ Add some style!</div>`;
+      if (cartTotalSpan) cartTotalSpan.innerText = '$0.00';
+      return;
+    }
+
+    let total = 0;
+    const itemsHtml = [];
+    cart.forEach(cartItem => {
+      const product = PRODUCTS.find(p => p.id === cartItem.id);
+      if (!product) return;
+      const itemTotal = product.price * cartItem.quantity;
+      total += itemTotal;
+
+      itemsHtml.push(`
+        <li class="cart-item" data-id="${product.id}">
+          <div class="cart-item-info">
+            <div class="cart-item-title">${product.imageEmoji} ${product.name}</div>
+            <div class="cart-item-price">$${product.price.toFixed(2)} each</div>
+          </div>
+          <div class="cart-item-qty">
+            <button class="cart-qty-btn decr-cart" data-id="${product.id}" data-op="decr">−</button>
+            <span class="qty-number" style="min-width: 28px;">${cartItem.quantity}</span>
+            <button class="cart-qty-btn incr-cart" data-id="${product.id}" data-op="incr">+</button>
+          </div>
+          <div class="cart-item-total">$${itemTotal.toFixed(2)}</div>
+        </li>
+      `);
+    });
+
+    cartListEl.innerHTML = itemsHtml.join('');
+    if (cartTotalSpan) cartTotalSpan.innerText = `$${total.toFixed(2)}`;
+
+    // attach event listeners to +/- inside cart
+    document.querySelectorAll('.decr-cart').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = parseInt(btn.getAttribute('data-id'));
+        const currentItem = cart.find(i => i.id === id);
+        if (currentItem) {
+          if (currentItem.quantity <= 1) {
+            setQuantity(id, 0);
+          } else {
+            updateQuantity(id, -1, true);
+          }
+        }
+      });
+    });
+
+    document.querySelectorAll('.incr-cart').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = parseInt(btn.getAttribute('data-id'));
+        updateQuantity(id, 1, true);
+      });
+    });
+  }
+
+  // open close cart drawer
+  const overlay = document.getElementById('cartOverlay');
+  const openCartBtn = document.getElementById('cartIconBtn');
+  const closeCartBtn = document.getElementById('closeCartBtn');
+
+  function openCartDrawer() {
+    if (overlay) {
+      overlay.classList.add('open');
+      renderCartDrawer(); // fresh render when open
+    }
+  }
+
+  function closeCartDrawer() {
+    if (overlay) overlay.classList.remove('open');
+  }
+
+  if (openCartBtn) openCartBtn.addEventListener('click', openCartDrawer);
+  if (closeCartBtn) closeCartBtn.addEventListener('click', closeCartDrawer);
+  // click outside to close (optional: click on overlay background)
+  if (overlay) {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeCartDrawer();
+    });
+  }
+
+  // checkout button
+  const checkoutBtn = document.getElementById('checkoutBtn');
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener('click', () => {
+      if (cart.length === 0) {
+        showToast("Your cart is empty, add some items first 🛍️");
+        return;
+      }
+      const total = cart.reduce((sum, item) => {
+        const prod = PRODUCTS.find(p => p.id === item.id);
+        return sum + (prod ? prod.price * item.quantity : 0);
+      }, 0);
+      showToast(`✅ Order placed! Total: $${total.toFixed(2)}. Thanks for shopping ❤️`);
+      // reset cart
+      cart = [];
+      updateCartUI();
+      closeCartDrawer();
+    });
+  }
+
+  // load cart from localStorage
+  function loadCartFromStorage() {
+    const stored = localStorage.getItem('mobileCart');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          cart = parsed.filter(item => item.id && typeof item.quantity === 'number' && item.quantity > 0);
+        }
+      } catch(e) { console.warn(e); }
+    }
+    // optional: if any product missing, keep only existing product ids
+    cart = cart.filter(cartItem => PRODUCTS.some(p => p.id === cartItem.id));
+    updateCartUI();
+  }
+
+  // initial render
+  function init() {
+    loadCartFromStorage();
+    renderProductCards();
+    renderCartDrawer();
+    // additional live sync: after product cards updates the counters will be fine
+  }
+
+  // override updateCartUI for full refresh
+  const origUpdate = updateCartUI;
+  window.updateCartUI = function() {
+    renderProductCards();
+    renderCartDrawer();
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const badge = document.getElementById('cartCountBadge');
+    if (badge) badge.innerText = totalItems;
+    localStorage.setItem('mobileCart', JSON.stringify(cart));
+  };
+  updateCartUI = window.updateCartUI;
+  window.updateCartUI();
+
+  // reassign updateQuantity to use new updateCartUI
+  function patchedUpdateQuantity(productId, changeBy) {
+    const idx = findCartItemIndex(productId);
+    const product = PRODUCTS.find(p => p.id === productId);
+    if (!product) return;
+
+    if (idx === -1 && changeBy > 0) {
+      cart.push({ id: productId, quantity: Math.min(99, changeBy) });
+    } else if (idx !== -1) {
+      const newQty = cart[idx].quantity + changeBy;
+      if (newQty <= 0) {
+        cart.splice(idx, 1);
+      } else {
+        cart[idx].quantity = Math.min(99, newQty);
+      }
+    }
+    window.updateCartUI();
+    showToast(changeBy > 0 ? `➕ ${product.name}` : `➖ ${product.name}`);
+  }
+
+  window.updateQuantity = patchedUpdateQuantity;
+  window.setQuantity = function(productId, newQty) {
+    if (newQty < 0) newQty = 0;
+    if (newQty === 0) {
+      const idx = findCartItemIndex(productId);
+      if (idx !== -1) cart.splice(idx, 1);
+    } else {
+      const idx = findCartItemIndex(productId);
+      if (idx !== -1) cart[idx].quantity = Math.min(99, newQty);
+      else cart.push({ id: productId, quantity: Math.min(99, newQty) });
+    }
+    window.updateCartUI();
+    showToast(`Cart updated`);
+  };
+
+  // rewire to global scope
+  init();
+</script>
+</body>
+</html>
